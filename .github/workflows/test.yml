@@ -1,0 +1,264 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Compile smart contracts
+        run: npm run compile
+
+      - name: Run tests
+        run: npm test
+
+      - name: Generate coverage report
+        run: npm run test:coverage
+        continue-on-error: true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+        continue-on-error: true
+
+  lint:
+    name: Code Linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run Solhint
+        run: npm run lint:sol
+        continue-on-error: true
+
+      - name: Run ESLint
+        run: npm run lint:ts
+        continue-on-error: true
+
+  build:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
+
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run npm audit (moderate+)
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: Check production dependencies
+        run: npm audit --production --audit-level=high
+        continue-on-error: true
+
+      - name: Solidity security check (Solhint)
+        run: npm run lint:sol
+        continue-on-error: true
+
+      - name: Check for hardcoded secrets
+        run: |
+          echo "🔍 Scanning for hardcoded secrets..."
+          if grep -rE "(private.*key.*=|secret.*=|password.*=.*['\"][a-zA-Z0-9]{20,})" --include="*.ts" --include="*.tsx" --include="*.js" src/; then
+            echo "⚠️ Warning: Possible hardcoded secrets detected"
+            exit 1
+          fi
+          echo "✅ No hardcoded secrets found"
+        continue-on-error: true
+
+      - name: Check for unsafe Web3 patterns
+        run: |
+          echo "🔍 Checking for unsafe Web3 patterns..."
+          # Check for tx.origin usage
+          if grep -r "tx.origin" contracts/; then
+            echo "❌ Error: tx.origin usage detected (use msg.sender)"
+            exit 1
+          fi
+          # Check for missing event emissions
+          if ! grep -r "emit " contracts/ | grep -q "."; then
+            echo "⚠️ Warning: No events found in contracts"
+          fi
+          echo "✅ Web3 security patterns check passed"
+        continue-on-error: true
+
+      - name: Dependency license check
+        run: |
+          echo "📜 Checking dependency licenses..."
+          npx license-checker --summary
+        continue-on-error: true
+
+  performance:
+    name: Performance Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build with size analysis
+        run: |
+          npm run build
+          echo "📊 Build size analysis:"
+          du -sh dist/
+          find dist/ -name "*.js" -exec du -h {} \; | sort -h
+
+      - name: Check bundle size
+        run: |
+          echo "🔍 Checking bundle sizes..."
+          MAX_SIZE=600
+          for file in dist/assets/*.js; do
+            if [ -f "$file" ]; then
+              size=$(du -k "$file" | cut -f1)
+              if [ $size -gt $MAX_SIZE ]; then
+                echo "⚠️ Warning: $file is ${size}KB (exceeds ${MAX_SIZE}KB)"
+              fi
+            fi
+          done
+        continue-on-error: true
+
+  typecheck:
+    name: TypeScript Type Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run TypeScript compiler
+        run: npx tsc --noEmit
+
+  gas-report:
+    name: Gas Usage Report
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Generate gas report
+        run: npm run test:gas
+        env:
+          REPORT_GAS: true
+        continue-on-error: true
+
+      - name: Comment PR with gas report
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            const fs = require('fs');
+            if (fs.existsSync('gas-report.txt')) {
+              const report = fs.readFileSync('gas-report.txt', 'utf8');
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: '## Gas Usage Report\n\n```\n' + report + '\n```'
+              });
+            }
+        continue-on-error: true
