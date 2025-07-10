@@ -1,1 +1,36 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
 
+# Commit message quality check
+commit_msg=$(cat "$1")
+
+# Check commit message length
+if [ ${#commit_msg} -lt 10 ]; then
+  echo "❌ Error: Commit message too short (minimum 10 characters)"
+  echo "   Please provide a meaningful commit message"
+  exit 1
+fi
+
+# Check for conventional commit format (optional but recommended)
+if ! echo "$commit_msg" | grep -qE "^(feat|fix|docs|style|refactor|test|chore|perf|security|build|ci)(\(.+\))?:.+"; then
+  echo "⚠️  Warning: Commit message doesn't follow conventional commits format"
+  echo "   Recommended: <type>(<scope>): <message>"
+  echo "   Types: feat, fix, docs, style, refactor, test, chore, perf, security, build, ci"
+  echo ""
+  echo "   Current message: $commit_msg"
+  echo ""
+  read -p "Continue anyway? (y/N): " -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    exit 1
+  fi
+fi
+
+# Security: Block commits with TODO or FIXME with security context
+if echo "$commit_msg" | grep -iE "(TODO.*security|FIXME.*security|TODO.*vulnerability|FIXME.*vulnerability)"; then
+  echo "❌ Error: Cannot commit with unresolved security TODOs/FIXMEs"
+  echo "   Please resolve security issues before committing"
+  exit 1
+fi
+
+echo "✅ Commit message validated"
