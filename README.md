@@ -2,7 +2,6 @@
 
 > Privacy-preserving urban planning with Fully Homomorphic Encryption on Zama FHEVM
 
-[![CI/CD Pipeline](https://github.com/confidential-land-platform/confidential-land-platform/actions/workflows/test.yml/badge.svg)](https://github.com/confidential-land-platform/confidential-land-platform/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/confidential-land-platform/confidential-land-platform/branch/main/graph/badge.svg)](https://codecov.io/gh/confidential-land-platform/confidential-land-platform)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.24-blue.svg)](https://soliditylang.org/)
@@ -11,6 +10,8 @@
 ## 🌐 Live Demo
 
 **Website**: [https://confidential-land-platform.vercel.app/](https://confidential-land-platform.vercel.app/)
+
+**Video Demo**: demo.mp4
 
 **Smart Contract**: [`0xba4FB3D706a6754FFbcF9B01Cc3176F003343d11`](https://sepolia.etherscan.io/address/0xba4FB3D706a6754FFbcF9B01Cc3176F003343d11)
 
@@ -632,10 +633,10 @@ in the Software without restriction...
 
 ## 📞 Contact & Support
 
-- **Issues**: [GitHub Issues](https://github.com/confidential-land-platform/confidential-land-platform/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/confidential-land-platform/confidential-land-platform/discussions)
+- **Issues**: [GitHub Issues](https://github.com/DeonReichert/LandPlatform/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/DeonReichert/LandPlatform/discussions)
 - **Email**: support@confidential-land-platform.io (example)
-- **Twitter**: [@ConfidentialLand](https://twitter.com/ConfidentialLand) (example)
+- **Twitter**: [@ConfidentialLand] (example)
 
 For security vulnerabilities, please **DO NOT** open a public issue. Contact us privately at security@confidential-land-platform.io
 
