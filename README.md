@@ -9,7 +9,7 @@
 
 ## 🌐 Live Demo
 
-**Website**: [https://confidential-land-platform.vercel.app/](https://confidential-land-platform.vercel.app/)
+**Website**: [https://deonreichert.github.io/LandPlatform/](https://deonreichert.github.io/LandPlatform/)
 
 **Video Demo**: demo.mp4
 
