@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment Test Page</title>
+    <style>
+        body {
+            background: #0a0d16;
+            color: #fff;
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 40px;
+            line-height: 1.6;
+        }
+        .test-item {
+            background: rgba(109, 110, 255, 0.1);
+            border: 1px solid rgba(109, 110, 255, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .success { border-color: #2bc37b; background: rgba(43, 195, 123, 0.1); }
+        .error { border-color: #ef5350; background: rgba(239, 83, 80, 0.1); }
+        h1 { color: #6d6eff; }
+        h2 { color: #f5f7ff; font-size: 1.2em; }
+        code {
+            background: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        a { color: #6d6eff; }
+    </style>
+</head>
+<body>
+    <h1>🔍 GitHub Pages Deployment Test</h1>
+
+    <div class="test-item success">
+        <h2>✅ Basic HTML Loading: SUCCESS</h2>
+        <p>If you can see this page, GitHub Pages is working and serving files correctly.</p>
+    </div>
+
+    <div class="test-item" id="js-test">
+        <h2>⏳ JavaScript Test: Checking...</h2>
+        <p id="js-status">JavaScript is loading...</p>
+    </div>
+
+    <div class="test-item">
+        <h2>📍 Base Path Test</h2>
+        <p>Current URL: <code id="current-url"></code></p>
+        <p>Base should be: <code>/LandPlatform/</code></p>
+        <p>Try accessing: <a href="/LandPlatform/test.html">test.html with base path</a></p>
+    </div>
+
+    <div class="test-item">
+        <h2>📁 File Structure Check</h2>
+        <p>Required files to check:</p>
+        <ul>
+            <li><a href="/LandPlatform/index.html" target="_blank">index.html</a></li>
+            <li><a href="/LandPlatform/favicon.svg" target="_blank">favicon.svg</a></li>
+            <li><a href="/LandPlatform/404.html" target="_blank">404.html</a></li>
+            <li><a href="/LandPlatform/assets/" target="_blank">assets folder</a> (should show files)</li>
+        </ul>
+        <p><strong>If any link gives 404, that file is missing!</strong></p>
+    </div>
+
+    <div class="test-item">
+        <h2>🔧 Debug Steps</h2>
+        <ol>
+            <li><strong>Open Browser DevTools</strong> (Press F12)</li>
+            <li><strong>Check Console tab</strong> - Look for any red error messages</li>
+            <li><strong>Check Network tab</strong> - Look for failed requests (404 errors in red)</li>
+            <li><strong>Check Elements tab</strong> - Verify if <code>&lt;div id="root"&gt;</code> has content</li>
+        </ol>
+    </div>
+
+    <div class="test-item">
+        <h2>📋 Common Issues</h2>
+        <p><strong>Black screen with no content:</strong></p>
+        <ul>
+            <li>JavaScript files not loading (404 errors)</li>
+            <li>Incorrect base path in vite.config.ts</li>
+            <li>Missing .nojekyll file</li>
+            <li>React runtime errors</li>
+        </ul>
+    </div>
+
+    <div class="test-item">
+        <h2>🎯 Expected Result</h2>
+        <p>Main site should show:</p>
+        <ul>
+            <li>🏙️ "Confidential Land Platform" title</li>
+            <li>Purple/green gradient theme</li>
+            <li>"Connect Wallet" button</li>
+            <li>Multiple tab sections</li>
+        </ul>
+    </div>
+
+    <div class="test-item">
+        <h2>📞 Next Steps</h2>
+        <p>If the main site is still black:</p>
+        <ol>
+            <li>Press F12 and screenshot the Console tab</li>
+            <li>Screenshot the Network tab showing any failed requests</li>
+            <li>Share those screenshots for diagnosis</li>
+        </ol>
+    </div>
+
+    <script>
+        // JavaScript test
+        document.getElementById('current-url').textContent = window.location.href;
+
+        const jsTest = document.getElementById('js-test');
+        const jsStatus = document.getElementById('js-status');
+
+        try {
+            jsTest.className = 'test-item success';
+            jsTest.querySelector('h2').innerHTML = '✅ JavaScript Test: SUCCESS';
+            jsStatus.innerHTML = 'JavaScript is running correctly! ✓';
+        } catch(e) {
+            jsTest.className = 'test-item error';
+            jsTest.querySelector('h2').innerHTML = '❌ JavaScript Test: FAILED';
+            jsStatus.innerHTML = 'Error: ' + e.message;
+        }
+
+        // Add fetch test for main page
+        fetch('/LandPlatform/index.html')
+            .then(response => {
+                console.log('✅ index.html fetch status:', response.status);
+                if(response.status === 200) {
+                    console.log('✅ index.html is accessible');
+                } else {
+                    console.error('❌ index.html returned status:', response.status);
+                }
+            })
+            .catch(err => {
+                console.error('❌ Failed to fetch index.html:', err);
+            });
+    </script>
+</body>
+</html>
