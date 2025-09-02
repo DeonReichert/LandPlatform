@@ -10,7 +10,7 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
     },
   },
-  base: '/LandPlatform/',
+  base: '/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
