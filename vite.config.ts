@@ -23,42 +23,20 @@ export default defineConfig({
     // Improves load time with lazy loading
     rollupOptions: {
       output: {
-        // Manual chunks for security isolation and caching
-        manualChunks: (id) => {
-          // Critical: Isolate Web3 libraries (attack surface reduction)
-          if (id.includes('node_modules/ethers')) {
-            return 'ethers-core';
-          }
-          if (id.includes('node_modules/wagmi') || id.includes('node_modules/viem')) {
-            return 'web3-wallet';
-          }
-          if (id.includes('@rainbow-me/rainbowkit')) {
-            return 'rainbowkit';
-          }
-
-          // UI Framework isolation
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
-            return 'react-vendor';
-          }
-
-          // Radix UI components (large bundle)
-          if (id.includes('@radix-ui')) {
-            return 'radix-vendor';
-          }
-
-          // Utility libraries
-          if (id.includes('node_modules') && !id.includes('@radix-ui')) {
-            return 'vendor-utils';
-          }
+        // Simplified manual chunks to avoid dependency issues
+        manualChunks: {
+          // React and core UI libraries
+          'react-vendor': ['react', 'react-dom'],
+          // RainbowKit wallet UI (keep together to preserve dependencies)
+          'rainbowkit': ['@rainbow-me/rainbowkit'],
+          // Radix UI components
+          'radix-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-tabs', '@radix-ui/react-toast'],
         },
 
         // Security: Content hashing for cache busting
         entryFileNames: 'assets/[name].[hash].js',
         chunkFileNames: 'assets/[name].[hash].js',
         assetFileNames: 'assets/[name].[hash].[ext]',
-
-        // Performance: Smaller chunks
-        experimentalMinChunkSize: 10000, // 10kb min chunk size
       }
     },
 
