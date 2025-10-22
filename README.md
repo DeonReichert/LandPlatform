@@ -9,7 +9,7 @@
 
 ## 🌐 Live Demo
 
-**Website**: [https://deonreichert.github.io/LandPlatform/](https://deonreichert.github.io/LandPlatform/)
+**Website**: [https://land-platform-chi.vercel.app/](https://land-platform-chi.vercel.app/)
 
 **Video Demo**: demo.mp4
 
