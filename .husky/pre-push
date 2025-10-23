@@ -1,0 +1,31 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚀 Running pre-push security and quality checks..."
+
+# Run tests before push
+echo "📋 Running tests..."
+npm run test || {
+  echo "❌ Tests failed. Push aborted."
+  exit 1
+}
+
+# TypeScript type check
+echo "🔍 Checking TypeScript types..."
+npx tsc --noEmit || {
+  echo "❌ TypeScript errors detected. Push aborted."
+  exit 1
+}
+
+# Security audit
+echo "🔒 Running security audit..."
+npm audit --audit-level=high || {
+  echo "⚠️  Security vulnerabilities detected (high/critical)"
+  read -p "Continue anyway? (y/N): " -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    exit 1
+  fi
+}
+
+echo "✅ Pre-push checks passed! Pushing to remote..."
