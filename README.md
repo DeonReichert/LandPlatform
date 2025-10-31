@@ -21,7 +21,7 @@
 
 ## 📋 Overview
 
-The Confidential Land Platform revolutionizes urban planning by enabling **privacy-preserving data analysis** on blockchain. Using **Zama's FHEVM** (Fully Homomorphic Encryption Virtual Machine), city planners can:
+This workspace (`D:\zamadapp\dapp127`) contains the **Confidential Land Platform** ecosystem, which revolutionizes urban planning by enabling **privacy-preserving data analysis** on blockchain. Using **Zama's FHEVM** (Fully Homomorphic Encryption Virtual Machine), city planners can:
 
 - 🔐 **Register encrypted land data** - Property valuations, zoning, demographics stay private
 - 📊 **Perform confidential analytics** - Compare development scenarios without exposing sensitive data
@@ -29,6 +29,18 @@ The Confidential Land Platform revolutionizes urban planning by enabling **priva
 - ✅ **Make data-driven decisions** - Optimize city planning while protecting stakeholder privacy
 
 Built for the **Zama FHE Challenge** - demonstrating real-world privacy-preserving blockchain applications.
+
+### 📁 Workspace Structure
+```
+dapp127/
+├── confidential-land-platform/    # Main privacy-preserving urban planning DApp
+│   ├── contracts/                 # Solidity smart contracts with FHE
+│   ├── src/                       # React frontend with TypeScript
+│   ├── test/                      # 45+ comprehensive test cases
+│   ├── scripts/                   # Deployment and bundle analysis
+│   └── vite.config.ts            # Advanced build configuration
+└── README.md                      # This file (workspace documentation)
+```
 
 ---
 
@@ -107,23 +119,32 @@ User Input → FHE Encryption → Smart Contract → Encrypted Storage
 
 ### Smart Contracts
 - **Solidity** 0.8.24 - Smart contract language
-- **Hardhat** 2.19.x - Development environment
+- **Hardhat** 2.19.5 - Development environment
 - **Zama fhEVM** 0.6.2 - Fully Homomorphic Encryption
 - **TypeChain** 9.1.0 - TypeScript bindings
 - **OpenZeppelin** - Secure contract patterns
+- **fhevmjs** 0.5.0 - FHE encryption client library
 
 ### Frontend
-- **Vite** 5.4.x - Lightning-fast build tool
-- **React** 18.x - UI library
-- **TypeScript** 5.x - Type safety
-- **Tailwind CSS** 3.x - Utility-first styling
-- **Radix UI** - Accessible components
+- **Vite** 5.0.11 - Lightning-fast build tool with advanced code splitting
+- **React** 18.2.0 - UI library
+- **TypeScript** 5.3.3 - Type safety with strict mode
+- **Tailwind CSS** 3.x - Utility-first styling with custom theme
+- **Radix UI** - Accessible components (Dialog, Dropdown, Tabs, Toast)
+- **PostCSS** - CSS processing
 
 ### Web3 Integration
-- **wagmi** 2.x - React hooks for Ethereum
-- **RainbowKit** 2.x - Wallet connection UI
-- **viem** 2.x - TypeScript Ethereum library
-- **ethers.js** 6.x - Ethereum interactions
+- **wagmi** 2.5.0 - React hooks for Ethereum
+- **RainbowKit** 2.0.0 - Wallet connection UI
+- **viem** 2.7.1 - TypeScript Ethereum library
+- **ethers.js** 6.10.0 - Ethereum interactions
+- **@tanstack/react-query** 5.17.19 - Data fetching and caching
+
+### Development Tools
+- **@fhevm-template/fhe-sdk** - FHE SDK for encryption operations
+- **@fhevm-template/fhevm-sdk** - FHEVM SDK integration
+- **@vitejs/plugin-react** 5.0.4 - React plugin for Vite
+- **@nomicfoundation/hardhat-toolbox** 4.0.0 - Hardhat plugins bundle
 
 ### Testing & Quality
 - **Mocha + Chai** - Test framework
@@ -136,6 +157,51 @@ User Input → FHE Encryption → Smart Contract → Encrypted Storage
 - **lint-staged** - Auto-fix on commit
 - **Code Splitting** - Optimized bundle
 - **DoS Protection** - Rate limiting utilities
+
+---
+
+## 📦 Project: Confidential Land Platform
+
+### Overview
+The **Confidential Land Platform** (`D:\zamadapp\dapp127\confidential-land-platform`) is a privacy-preserving urban planning platform built with Zama's FHEVM technology. It demonstrates real-world applications of Fully Homomorphic Encryption for secure data analysis on blockchain.
+
+### Key Features
+- 🔐 **Encrypted Land Registry** - Register property valuations, zoning, and demographics with complete privacy
+- 📊 **Confidential Analytics** - Compare development scenarios without exposing sensitive data
+- 🏗️ **Project Management** - Submit budgets and impact assessments with end-to-end encryption
+- ✅ **Privacy-First Design** - All sensitive data encrypted using `euint64` and `ebool` types
+
+### Technology Highlights
+- **Modern Stack**: Vite + React 18 + TypeScript 5.3.3
+- **Advanced Styling**: Tailwind CSS with custom purple theme and Radix UI components
+- **FHE Integration**: Client-side encryption with fhevmjs 0.5.0
+- **Code Splitting**: Optimized chunks for React, RainbowKit, and Radix UI
+- **Security Headers**: XSS protection, frame options, content type sniffing prevention
+- **Build Optimization**: ESBuild minification, tree shaking, console log removal in production
+
+### Architecture
+```
+Frontend (Vite + React + TypeScript)
+    ↓ Client-side FHE encryption (fhevmjs)
+Smart Contract (Solidity 0.8.24)
+    ↓ Homomorphic operations (TFHE)
+Zama FHEVM on Sepolia Testnet
+    ↓ Encrypted computation + KMS
+```
+
+### Deployment
+- **Live Demo**: [https://land-platform-chi.vercel.app/](https://land-platform-chi.vercel.app/)
+- **Contract Address**: `0xba4FB3D706a6754FFbcF9B01Cc3176F003343d11`
+- **Network**: Sepolia Testnet (Chain ID: 11155111)
+- **Dev Server**: Port 1271
+
+### Documentation
+See `confidential-land-platform/README.md` for:
+- Detailed setup instructions
+- FHE operations examples
+- Smart contract API reference
+- Testing guide (45+ test cases)
+- Security features and performance metrics
 
 ---
 
