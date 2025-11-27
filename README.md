@@ -11,7 +11,7 @@
 
 **Website**: [https://land-platform-chi.vercel.app/](https://land-platform-chi.vercel.app/)
 
-**Video Demo**: demo.mp4
+**Video Demo**: demo.mp4  https://streamable.com/glys7b 
 
 **Smart Contract**: [`0xba4FB3D706a6754FFbcF9B01Cc3176F003343d11`](https://sepolia.etherscan.io/address/0xba4FB3D706a6754FFbcF9B01Cc3176F003343d11)
 
